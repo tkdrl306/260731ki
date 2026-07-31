@@ -109,7 +109,7 @@ export default function QuizPage() {
             일차방정식 퀴즈!
           </h1>
           <p className="text-xl text-slate-600 mb-8">
-            60초 동안 최대한 많은 방정식의 <b>'x'</b> 값을 구해보세요!
+            60초 동안 최대한 많은 방정식의 <b>&apos;x&apos;</b> 값을 구해보세요!
           </p>
           <button 
             onClick={startGame}
