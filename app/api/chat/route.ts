@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
+    // Initialize OpenAI client inside the handler so it doesn't crash the build if env var is missing
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY || "placeholder",
+    });
+
     const { question } = await req.json();
 
     if (!question) {
