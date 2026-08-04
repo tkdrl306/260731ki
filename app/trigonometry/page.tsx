@@ -9,26 +9,31 @@ import Link from "next/link";
 
 // 퀴즈 문제 뱅크 (동일)
 const quizBank = [
-  { q: "\\sin 30^\\circ", a: "\\frac{1}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"] },
-  { q: "\\cos 45^\\circ", a: "\\frac{\\sqrt{2}}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"] },
-  { q: "\\tan 60^\\circ", a: "\\sqrt{3}", choices: ["\\frac{\\sqrt{3}}{3}", "1", "\\sqrt{3}", "0"] },
-  { q: "\\sin 90^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "\\sqrt{2}"] },
-  { q: "\\cos 0^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "\\frac{\\sqrt{3}}{2}"] },
-  { q: "\\tan 45^\\circ", a: "1", choices: ["0", "\\frac{\\sqrt{3}}{3}", "1", "\\sqrt{3}"] },
-  { q: "\\sin 60^\\circ", a: "\\frac{\\sqrt{3}}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"] },
-  { q: "\\cos 30^\\circ", a: "\\frac{\\sqrt{3}}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"] },
-  { q: "\\sin 0^\\circ", a: "0", choices: ["0", "1", "\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}"] },
-  { q: "\\cos 90^\\circ", a: "0", choices: ["0", "1", "\\frac{1}{2}", "\\frac{\\sqrt{3}}{2}"] },
-  { q: "\\sin 30^\\circ + \\cos 60^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "\\sqrt{2}"] },
-  { q: "\\sin 45^\\circ + \\cos 45^\\circ", a: "\\sqrt{2}", choices: ["1", "\\sqrt{2}", "\\frac{\\sqrt{2}}{2}", "2"] },
-  { q: "\\tan 45^\\circ + \\sin 90^\\circ", a: "2", choices: ["0", "1", "2", "\\sqrt{3}"] },
-  { q: "\\cos 0^\\circ - \\sin 90^\\circ", a: "0", choices: ["0", "1", "-1", "\\frac{1}{2}"] },
-  { q: "\\tan 60^\\circ - \\tan 30^\\circ", a: "\\frac{2\\sqrt{3}}{3}", choices: ["\\frac{\\sqrt{3}}{3}", "\\frac{2\\sqrt{3}}{3}", "\\sqrt{3}", "0"] },
-  { q: "\\sin 60^\\circ + \\cos 30^\\circ", a: "\\sqrt{3}", choices: ["1", "\\sqrt{2}", "\\sqrt{3}", "2"] },
-  { q: "\\sin^2 45^\\circ + \\cos^2 45^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "2"] },
-  { q: "\\tan 30^\\circ \\times \\tan 60^\\circ", a: "1", choices: ["0", "\\frac{1}{3}", "1", "\\sqrt{3}"] },
-  { q: "\\sin 60^\\circ \\times \\cos 30^\\circ", a: "\\frac{3}{4}", choices: ["\\frac{1}{4}", "\\frac{1}{2}", "\\frac{3}{4}", "1"] },
-  { q: "2\\sin 30^\\circ + \\sqrt{2}\\cos 45^\\circ", a: "2", choices: ["1", "2", "\\sqrt{2}", "3"] },
+  // 60 points (Basic)
+  { q: "\\sin 30^\\circ", a: "\\frac{1}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"], score: 60 },
+  { q: "\\cos 45^\\circ", a: "\\frac{\\sqrt{2}}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"], score: 60 },
+  { q: "\\tan 60^\\circ", a: "\\sqrt{3}", choices: ["\\frac{\\sqrt{3}}{3}", "1", "\\sqrt{3}", "0"], score: 60 },
+  { q: "\\sin 90^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "\\sqrt{2}"], score: 60 },
+  { q: "\\cos 0^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "\\frac{\\sqrt{3}}{2}"], score: 60 },
+  { q: "\\tan 45^\\circ", a: "1", choices: ["0", "\\frac{\\sqrt{3}}{3}", "1", "\\sqrt{3}"], score: 60 },
+  { q: "\\sin 60^\\circ", a: "\\frac{\\sqrt{3}}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"], score: 60 },
+  { q: "\\cos 30^\\circ", a: "\\frac{\\sqrt{3}}{2}", choices: ["\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{\\sqrt{3}}{2}", "1"], score: 60 },
+  { q: "\\sin 0^\\circ", a: "0", choices: ["0", "1", "\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}"], score: 60 },
+  { q: "\\cos 90^\\circ", a: "0", choices: ["0", "1", "\\frac{1}{2}", "\\frac{\\sqrt{3}}{2}"], score: 60 },
+  
+  // 80 points (Intermediate)
+  { q: "\\sin 30^\\circ + \\cos 60^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "\\sqrt{2}"], score: 80 },
+  { q: "\\sin 45^\\circ + \\cos 45^\\circ", a: "\\sqrt{2}", choices: ["1", "\\sqrt{2}", "\\frac{\\sqrt{2}}{2}", "2"], score: 80 },
+  { q: "\\cos 0^\\circ - \\sin 90^\\circ", a: "0", choices: ["0", "1", "-1", "\\frac{1}{2}"], score: 80 },
+  { q: "\\sin 60^\\circ + \\cos 30^\\circ", a: "\\sqrt{3}", choices: ["1", "\\sqrt{2}", "\\sqrt{3}", "2"], score: 80 },
+  { q: "\\tan 45^\\circ \\times \\sin 90^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "\\sqrt{3}"], score: 80 },
+  
+  // 100 points (Advanced)
+  { q: "\\tan 60^\\circ - \\tan 30^\\circ", a: "\\frac{2\\sqrt{3}}{3}", choices: ["\\frac{\\sqrt{3}}{3}", "\\frac{2\\sqrt{3}}{3}", "\\sqrt{3}", "0"], score: 100 },
+  { q: "\\sin^2 45^\\circ + \\cos^2 45^\\circ", a: "1", choices: ["0", "\\frac{1}{2}", "1", "2"], score: 100 },
+  { q: "\\tan 30^\\circ \\times \\tan 60^\\circ", a: "1", choices: ["0", "\\frac{1}{3}", "1", "\\sqrt{3}"], score: 100 },
+  { q: "\\sin 60^\\circ \\times \\cos 30^\\circ", a: "\\frac{3}{4}", choices: ["\\frac{1}{4}", "\\frac{1}{2}", "\\frac{3}{4}", "1"], score: 100 },
+  { q: "2\\sin 30^\\circ + \\sqrt{2}\\cos 45^\\circ", a: "2", choices: ["1", "2", "\\sqrt{2}", "3"], score: 100 },
 ];
 
 function TrigGameContent() {
@@ -80,13 +85,12 @@ function TrigGameContent() {
 
   const handleAnswer = (choice: string) => {
     if (choice === currentQuestion.a) {
-      setScore(prev => prev + 100);
+      setScore(prev => prev + (currentQuestion.score || 100));
       setCorrectCount(prev => prev + 1);
       setTimeLeft(prev => prev + 10);
       triggerEffect("+10s", "good");
     } else {
-      setTimeLeft(prev => Math.max(0, prev - 5));
-      triggerEffect("-5s", "bad");
+      triggerEffect("틀렸습니다", "bad");
       setIsShaking(true);
       setTimeout(() => setIsShaking(false), 300);
       setWrongQuestions(prev => [...prev, { q: currentQuestion.q, a: currentQuestion.a, userA: choice }]);
