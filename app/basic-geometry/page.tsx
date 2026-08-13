@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { GeometrySymbol, GeometryType } from '../../components/GeometrySymbols';
+import { GeometrySymbol, GeometryPicture, GeometryType, VisualGeometryType } from '../../components/GeometrySymbols';
 
 type GameState = 'intro' | 'playing' | 'gameOver';
 
@@ -11,11 +11,7 @@ interface LeaderboardEntry {
   date: string;
 }
 
-const CONCEPTS: { type: GeometryType; label: string }[] = [
-  { type: 'line', label: '직선' },
-  { type: 'ray', label: '반직선' },
-  { type: 'segment', label: '선분' },
-];
+const ALPHABETS = ['A', 'B', 'C', 'D', 'E', 'F', 'P', 'Q', 'R', 'S', 'X', 'Y', 'M', 'N'];
 
 const POSITIVE_FEEDBACKS = ['정답이에요! +3초', '훌륭해요! +3초', '정확해요! +3초', '아주 잘했어요! +3초'];
 const ENCOURAGING_FEEDBACKS = ['아쉽네요!', '조금 더 생각해볼까요?', '다시 한 번 집중해봐요!', '할 수 있어요!'];
@@ -28,8 +24,10 @@ export default function BasicGeometryGame() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [totalTime, setTotalTime] = useState(0);
-  const [targetConcept, setTargetConcept] = useState<{ type: GeometryType; label: string }>(CONCEPTS[0]);
-  const [options, setOptions] = useState<GeometryType[]>([]);
+  
+  const [questionVisual, setQuestionVisual] = useState<{ type: VisualGeometryType, points: [string, string] }>({ type: 'segment', points: ['A', 'B'] });
+  const [correctOption, setCorrectOption] = useState<{ type: GeometryType, points: string }>({ type: 'segment', points: 'AB' });
+  const [options, setOptions] = useState<{ type: GeometryType, points: string }[]>([]);
   
   // UI state
   const [feedbackMsg, setFeedbackMsg] = useState('');
@@ -59,23 +57,44 @@ export default function BasicGeometryGame() {
   };
 
   const generateQuestion = () => {
-    const target = CONCEPTS[Math.floor(Math.random() * CONCEPTS.length)];
-    setTargetConcept(target);
+    const p1 = ALPHABETS[Math.floor(Math.random() * ALPHABETS.length)];
+    let p2 = ALPHABETS[Math.floor(Math.random() * ALPHABETS.length)];
+    while (p1 === p2) {
+      p2 = ALPHABETS[Math.floor(Math.random() * ALPHABETS.length)];
+    }
+    const points: [string, string] = [p1, p2];
     
-    // Shuffle options
-    const shuffled = [...CONCEPTS].sort(() => Math.random() - 0.5).map(c => c.type);
+    const visualTypes: VisualGeometryType[] = ['line', 'ray', 'ray-reverse', 'segment'];
+    const selectedVisual = visualTypes[Math.floor(Math.random() * visualTypes.length)];
+    
+    setQuestionVisual({ type: selectedVisual, points });
+    
+    let correct: { type: GeometryType, points: string };
+    if (selectedVisual === 'line') correct = { type: 'line', points: `${p1}${p2}` };
+    else if (selectedVisual === 'ray') correct = { type: 'ray', points: `${p1}${p2}` };
+    else if (selectedVisual === 'ray-reverse') correct = { type: 'ray', points: `${p2}${p1}` };
+    else correct = { type: 'segment', points: `${p1}${p2}` };
+    
+    setCorrectOption(correct);
+
+    const allOptions: { type: GeometryType, points: string }[] = [
+      { type: 'line', points: `${p1}${p2}` },
+      { type: 'ray', points: `${p1}${p2}` },
+      { type: 'ray', points: `${p2}${p1}` },
+      { type: 'segment', points: `${p1}${p2}` }
+    ];
+    
+    const shuffled = allOptions.sort(() => Math.random() - 0.5);
     setOptions(shuffled);
   };
 
-  const handleAnswer = (selectedType: GeometryType) => {
-    if (selectedType === targetConcept.type) {
-      // Correct answer
+  const handleAnswer = (selectedOpt: { type: GeometryType, points: string }) => {
+    if (selectedOpt.type === correctOption.type && selectedOpt.points === correctOption.points) {
       setScore(s => s + 1);
       setTimeLeft(t => t + 3);
       setFeedbackType('success');
       setFeedbackMsg(POSITIVE_FEEDBACKS[Math.floor(Math.random() * POSITIVE_FEEDBACKS.length)]);
     } else {
-      // Wrong answer
       setFeedbackType('error');
       setFeedbackMsg(ENCOURAGING_FEEDBACKS[Math.floor(Math.random() * ENCOURAGING_FEEDBACKS.length)]);
     }
@@ -139,7 +158,7 @@ export default function BasicGeometryGame() {
           <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-2">
             기본도형 마스터
           </h1>
-          <p className="text-sm text-gray-500">직선, 반직선, 선분 기호를 맞춰보세요!</p>
+          <p className="text-sm text-gray-500">그림을 보고 올바른 기호를 맞춰보세요!</p>
         </div>
 
         {/* Intro Screen */}
@@ -214,10 +233,11 @@ export default function BasicGeometryGame() {
             </div>
 
             {/* Question */}
-            <div className="text-center mt-4">
-              <h2 className="text-xl font-medium text-gray-700 mb-2">
-                다음 중 <span className="font-extrabold text-purple-700 text-2xl">{targetConcept.label} AB</span>를<br/>나타내는 기호는?
+            <div className="text-center mt-2 bg-indigo-50/50 rounded-2xl p-4 border-2 border-indigo-100 shadow-inner flex flex-col items-center">
+              <h2 className="text-md font-semibold text-indigo-800 mb-2">
+                다음 그림을 나타내는 기호는?
               </h2>
+              <GeometryPicture type={questionVisual.type} points={questionVisual.points} />
             </div>
 
             {/* Feedback Message */}
@@ -232,15 +252,15 @@ export default function BasicGeometryGame() {
             </div>
 
             {/* Options */}
-            <div className="grid grid-cols-1 gap-4">
-              {options.map((optType, idx) => (
+            <div className="grid grid-cols-2 gap-4">
+              {options.map((opt, idx) => (
                 <button
                   key={idx}
-                  onClick={() => handleAnswer(optType)}
+                  onClick={() => handleAnswer(opt)}
                   className="group relative w-full bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-sm hover:shadow-md hover:border-purple-300 transition-all active:scale-[0.98] flex items-center justify-center overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-50 to-pink-50 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <GeometrySymbol type={optType} className="text-gray-800 z-10 group-hover:scale-110 transition-transform" />
+                  <GeometrySymbol type={opt.type} points={opt.points} className="text-gray-800 z-10 group-hover:scale-110 transition-transform" />
                 </button>
               ))}
             </div>
