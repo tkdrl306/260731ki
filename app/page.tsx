@@ -79,6 +79,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 기본도형 마스터 배너 */}
+      <section className="bg-gradient-to-bl from-indigo-100 to-purple-200 p-8 rounded-[3rem] shadow-lg w-full text-center border-none">
+        <h2 className="text-3xl md:text-4xl font-bold text-indigo-700 mb-4 drop-shadow-sm flex items-center justify-center gap-2">
+          <Gamepad2 className="text-purple-600 w-8 h-8" />
+          기본도형 마스터!
+          <Gamepad2 className="text-purple-600 w-8 h-8" />
+        </h2>
+        <p className="text-lg text-indigo-800 mb-6 font-medium">직선, 반직선, 선분 기호를 맞춰보세요</p>
+        
+        <Link 
+          href="/basic-geometry"
+          className="inline-flex items-center gap-3 px-8 py-4 bg-white text-indigo-600 font-bold rounded-full text-lg shadow-md hover:shadow-lg hover:-translate-y-1 hover:bg-indigo-50 transition-all duration-200"
+        >
+          <Play className="w-6 h-6 fill-current" />
+          게임 시작하기
+        </Link>
+      </section>
+
       {/* 일차방정식 게임 섹션 */}
       <div className="flex flex-col items-center justify-center w-full bg-white p-10 rounded-[3rem] shadow-lg border-none gap-10">
         <h1 className="text-4xl md:text-5xl text-pastel-blue drop-shadow-sm text-center">
