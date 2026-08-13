@@ -6,6 +6,7 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import { ArrowLeft, RefreshCcw, Home, BookOpen, Trophy } from "lucide-react";
 import Link from "next/link";
+import { supabase } from "@/utils/supabase";
 
 // 퀴즈 문제 뱅크 (동일)
 const quizBank = [
@@ -106,19 +107,30 @@ function TrigGameContent() {
     setTimeout(() => setEffect(null), 1000);
   };
 
-  const endGame = () => {
+  const endGame = async () => {
     setGameState("result");
-    const newScore = { name: playerName, score, date: new Date().toLocaleDateString() };
     
-    // 로컬 스토리지에 랭킹 저장 (현재 점수를 스냅샷으로 사용하므로 이전 score를 사용해야 할 수도 있지만, 
-    // 리액트 상태 업데이트 비동기성 때문에 클로저 문제 방지를 위해 함수형 업데이트 내부나 로컬변수 참조 권장)
-    // 여기선 동기적으로 처리
-    const saved = JSON.parse(localStorage.getItem('trigScores') || "[]");
-    saved.push(newScore);
-    saved.sort((a: any, b: any) => b.score - a.score);
-    const top10 = saved.slice(0, 10);
-    localStorage.setItem('trigScores', JSON.stringify(top10));
-    setLeaderboard(top10);
+    try {
+      // 1. Supabase에 현재 점수 저장
+      if (playerName.trim()) {
+        await supabase
+          .from("trig_scores")
+          .insert([{ player_name: playerName, score }]);
+      }
+
+      // 2. Supabase에서 Top 10 순위 불러오기
+      const { data, error } = await supabase
+        .from("trig_scores")
+        .select("*")
+        .order("score", { ascending: false })
+        .limit(10);
+        
+      if (!error && data) {
+        setLeaderboard(data);
+      }
+    } catch (error) {
+      console.error("점수 저장/불러오기 실패:", error);
+    }
   };
 
   // 수식 렌더링 헬퍼
@@ -204,7 +216,7 @@ function TrigGameContent() {
           <ul className="space-y-2">
             {leaderboard.map((s, idx) => (
               <li key={idx} className={`flex justify-between items-center p-3 rounded-xl ${idx === 0 ? 'bg-yellow-100 border border-yellow-300 font-bold text-lg' : 'bg-white'}`}>
-                <span className={idx === 0 ? 'text-yellow-700' : 'text-slate-600'}>{idx + 1}. {s.name}</span>
+                <span className={idx === 0 ? 'text-yellow-700' : 'text-slate-600'}>{idx + 1}. {s.player_name || s.name}</span>
                 <span className={idx === 0 ? 'text-yellow-600' : 'text-pastel-blue font-bold'}>{s.score}점</span>
               </li>
             ))}

@@ -209,7 +209,7 @@ export default function BasicGeometryGame() {
             <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
               <div 
                 className="bg-purple-500 h-1.5 transition-all duration-1000 ease-linear" 
-                style={{ width: \`\${(totalTime / 180) * 100}%\` }}
+                style={{ width: `${(totalTime / 180) * 100}%` }}
               ></div>
             </div>
 
@@ -271,7 +271,7 @@ export default function BasicGeometryGame() {
                     : 'bg-white'
                   }`}>
                     <span className="font-bold text-gray-700 flex items-center gap-2">
-                      <span className="w-6 text-center">{idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : \`\${idx + 1}.\`}</span>
+                      <span className="w-6 text-center">{idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}.`}</span>
                       {entry.nickname}
                     </span>
                     <span className="font-black text-purple-600">{entry.score}점</span>
